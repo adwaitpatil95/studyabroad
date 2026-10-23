@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalPath AI - Study Abroad Platform</title>
+
+  <!-- Google Fonts: Titillium Web & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Titillium+Web:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'mint-primary': '#00f0a0',
+            'mint-canvas': '#ecffe0',
+            'ink-black': '#000000',
+            'muted-gray': '#86909c',
+            'hairline': '#e5e7eb',
+            'surface-soft': '#f2f4f5'
+          },
+          fontFamily: {
+            display: ['"Titillium Web"', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            'pill-nav': '18px',
+            'pill-primary': '28px',
+            'pill-mint': '36px',
+            'card-asym': '40px 40px 40px 0px',
+            'card-lg': '24px'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Design System Custom Overrides & Utility Classes */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Titillium Web', sans-serif;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f2f4f5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #86909c;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #000000;
+    }
+
+    /* Continuous Ticker Animation */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: 200%;
+      animation: marquee 25s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+
+    /* Asymmetric Card Geometry */
+    .card-jobright {
+      border-radius: 40px 40px 40px 0px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-jobright:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 35px -10px rgba(0, 0, 0, 0.08);
+    }
+
+    /* High-contrast Pill Buttons */
+    .btn-pill-black {
+      background-color: #000000;
+      color: #ffffff;
+      border-radius: 28px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-pill-black:hover {
+      background-color: #222222;
+      transform: scale(1.02);
+    }
+
+    .btn-pill-mint {
+      background-color: #00f0a0;
+      color: #000000;
+      border: 1px solid #000000;
+      border-radius: 36px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-pill-mint:hover {
+      background-color: #00d88f;
+      transform: scale(1.02);
+    }
+
+    .btn-pill-nav {
+      background-color: #000000;
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-pill-nav:hover {
+      background-color: #00f0a0;
+      color: #000000;
+    }
+
+    /* Background Watermark/Badge for Exam Tracker */
+    .hero-bg-tracker {
+      background: linear-gradient(135deg, rgba(0, 240, 160, 0.2) 0%, rgba(236, 255, 224, 0.8) 100%);
+      border: 2px dashed #000000;
+    }
+  </style>
+</head>
+<body class="bg-white text-ink-black antialiased selection:bg-mint-primary selection:text-ink-black">
+
+  <!-- ================= 1. TOP NAVIGATION BAR ================= -->
+  <nav class="sticky top-0 z-40 bg-white border-b border-hairline px-4 md:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2 group" onclick="switchTab('home')">
+        <div class="w-10 h-10 rounded-full bg-ink-black flex items-center justify-center text-mint-primary font-display font-bold text-xl group-hover:scale-105 transition-transform">
+          G
+        </div>
+        <span class="font-display font-bold text-2xl tracking-tight text-ink-black">GlobalPath<span class="text-mint-primary">.ai</span></span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <div class="hidden lg:flex items-center gap-6 font-medium text-sm text-ink-black">
+        <button onclick="switchTab('home')" class="nav-item hover:text-mint-primary transition-colors py-1">Home</button>
+        <button onclick="switchTab('documents')" class="nav-item hover:text-mint-primary transition-colors py-1">Admissions Checklist</button>
+        <button onclick="switchTab('sop-lor')" class="nav-item hover:text-mint-primary transition-colors py-1">SOP & LOR Hub</button>
+        <button onclick="switchTab('exams')" class="nav-item hover:text-mint-primary transition-colors py-1">Exams & Tracker</button>
+        <button onclick="switchTab('scholarships')" class="nav-item hover:text-mint-primary transition-colors py-1">Scholarships</button>
+        <button onclick="switchTab('video-space')" class="nav-item hover:text-mint-primary transition-colors py-1">1:1 Guiders <span class="bg-mint-primary px-2 py-0.5 rounded-full text-xs text-ink-black font-bold ml-1">Live Call</span></button>
+      </div>
+
+      <!-- Action Area -->
+      <div class="flex items-center gap-3">
+        <!-- Dashboard View Toggle -->
+        <div class="hidden sm:flex items-center bg-surface-soft p-1 rounded-full border border-hairline text-xs font-semibold">
+          <button id="view-student-btn" onclick="toggleUserRole('student')" class="px-3 py-1 rounded-full bg-white text-ink-black shadow-sm transition-all">Student View</button>
+          <button id="view-guider-btn" onclick="toggleUserRole('guider')" class="px-3 py-1 rounded-full text-muted-gray hover:text-ink-black transition-all">Guider View</button>
+        </div>
+
+        <button onclick="openRegisterModal()" class="btn-pill-nav">Join / Register</button>
+        
+        <!-- Mobile Menu Trigger -->
+        <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-ink-black focus:outline-none">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-hairline mt-3 pt-3 pb-4 px-4 flex flex-col gap-3">
+      <button onclick="switchTab('home'); toggleMobileMenu()" class="text-left font-semibold py-2">Home</button>
+      <button onclick="switchTab('documents'); toggleMobileMenu()" class="text-left font-semibold py-2">Admissions Checklist</button>
+      <button onclick="switchTab('sop-lor'); toggleMobileMenu()" class="text-left font-semibold py-2">SOP & LOR Hub</button>
+      <button onclick="switchTab('exams'); toggleMobileMenu()" class="text-left font-semibold py-2">Exams & Tracker</button>
+      <button onclick="switchTab('scholarships'); toggleMobileMenu()" class="text-left font-semibold py-2">Scholarships</button>
+      <button onclick="switchTab('video-space'); toggleMobileMenu()" class="text-left font-semibold py-2">1:1 Mentors & Calls</button>
+      <div class="pt-2 border-t border-hairline flex items-center justify-between">
+        <span class="text-xs text-muted-gray">Role Mode:</span>
+        <div class="flex gap-2">
+          <button onclick="toggleUserRole('student')" class="text-xs bg-surface-soft px-3 py-1 rounded-full font-bold">Student</button>
+          <button onclick="toggleUserRole('guider')" class="text-xs bg-surface-soft px-3 py-1 rounded-full font-bold">Guider</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= 2. SCROLLING BLACK TICKER ================= -->
+  <div class="bg-ink-black text-white py-3 overflow-hidden border-y border-ink-black">
+    <div class="animate-marquee whitespace-nowrap flex items-center gap-12 text-sm font-medium">
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🎓 Harvard University 2027 Fall Deadline: Dec 15</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🏆 Fulbright Foreign Student Scholarship Open ($50k)</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🇨🇭 ETH Zurich Excellence Scholarship: Deadline Nov 30</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 📝 IELTS Academic Exam Slots Booking for Next Month</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🇬🇧 Oxford Rhodes Scholarship Deadline Approaching</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🇸🇬 NUS Singapore ASEAN Undergraduate Grants Active</span>
+      <!-- Duplicate for seamless infinite loop -->
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🎓 Harvard University 2027 Fall Deadline: Dec 15</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🏆 Fulbright Foreign Student Scholarship Open ($50k)</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 🇨🇭 ETH Zurich Excellence Scholarship: Deadline Nov 30</span>
+      <span class="flex items-center gap-2"><i class="fa-solid fa-circle text-[8px] text-mint-primary"></i> 📝 IELTS Academic Exam Slots Booking for Next Month</span>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER (Dynamic Tab Views) -->
+  <main id="main-content">
+
+    <!-- ================= VIEW 1: HOME PAGE HERO & OVERVIEW ================= -->
+    <section id="view-home" class="tab-view block">
+      
+      <!-- Mint Hero Section -->
+      <div class="bg-mint-canvas py-16 md:py-24 px-4 md:px-8 border-b border-hairline relative">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full border border-ink-black text-xs font-bold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-mint-primary animate-pulse"></span> Your AI Study Abroad Gateway
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold leading-none tracking-tight text-ink-black">
+              DESTINATION: <span class="underline decoration-mint-primary underline-offset-8">WORLD-CLASS</span> EDUCATION.
+            </h1>
+
+            <p class="text-lg md:text-xl font-light text-ink-black/80 max-w-2xl leading-relaxed">
+              Match with 20+ dream universities, get verified SOPs/LORs from student guiders who made it, track critical exam dates, and book 1:1 live video mentorship sessions.
+            </p>
+
+            <div class="flex flex-wrap gap-4 pt-4">
+              <button onclick="openRegisterModal('student')" class="btn-pill-black px-8 py-4 text-base flex items-center gap-3">
+                <span>Start Your Student Profile</span>
+                <i class="fa-solid fa-arrow-right text-mint-primary"></i>
+              </button>
+
+              <button onclick="openRegisterModal('guider')" class="btn-pill-mint px-8 py-4 text-base flex items-center gap-3">
+                <span>Apply as Peer Guider</span>
+                <i class="fa-solid fa-user-graduate"></i>
+              </button>
+            </div>
+
+            <!-- Active Exam Countdown Watermark Card (Dynamic Background Feature) -->
+            <div id="hero-tracker-card" class="mt-8 p-4 rounded-2xl hero-bg-tracker flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-ink-black text-mint-primary rounded-xl flex items-center justify-center text-xl font-bold">
+                  <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div>
+                  <div class="text-xs uppercase font-bold text-ink-black/70 tracking-wider">Active Target Date Tracker</div>
+                  <div id="tracker-exam-title" class="font-display font-bold text-lg text-ink-black">GRE General Test — Target Date</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div id="tracker-days-count" class="font-display font-bold text-3xl text-ink-black">42 Days Left</div>
+                <button onclick="switchTab('exams')" class="text-xs underline font-semibold text-ink-black hover:text-muted-gray">Manage / Change</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Hero Graphic / Mockup Card -->
+          <div class="lg:col-span-5">
+            <div class="bg-white p-6 card-jobright border-2 border-ink-black relative">
+              <div class="flex items-center justify-between pb-4 border-b border-hairline mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-mint-canvas flex items-center justify-center font-bold text-ink-black">
+                    🎓
+                  </div>
+                  <div>
+                    <h4 class="font-display font-bold text-base leading-tight">Student AI Match Hub</h4>
+                    <span class="text-xs text-muted-gray">Live Admissions Score: 96%</span>
+                  </div>
+                </div>
+                <span class="bg-mint-primary px-3 py-1 rounded-full text-xs font-bold border border-ink-black">TOP MATCH</span>
+              </div>
+
+              <!-- Inner Feature Content -->
+              <div class="space-y-4">
+                <div class="p-3 bg-surface-soft rounded-xl flex justify-between items-center text-sm">
+                  <span class="font-medium">Target College Preference</span>
+                  <span class="font-bold">Stanford University</span>
+                </div>
+                <div class="p-3 bg-surface-soft rounded-xl flex justify-between items-center text-sm">
+                  <span class="font-medium">SOP Readiness Score</span>
+                  <span class="font-bold text-emerald-600">Verified by Peer</span>
+                </div>
+                <div class="p-3 bg-surface-soft rounded-xl flex justify-between items-center text-sm">
+                  <span class="font-medium">VISA Document Status</span>
+                  <span class="font-bold text-blue-600">5 / 7 Uploaded</span>
+                </div>
+
+                <div class="bg-ink-black text-white p-4 rounded-2xl flex items-center justify-between">
+                  <div>
+                    <div class="text-xs text-mint-primary font-bold">UPCOMING MENTOR CALL</div>
+                    <div class="text-sm font-semibold">1:1 Call with Sarah (Oxford)</div>
+                  </div>
+                  <button onclick="switchTab('video-space')" class="bg-mint-primary text-ink-black px-3 py-1.5 rounded-full text-xs font-bold">Join Room</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Platform Stats Band -->
+      <div class="bg-white py-12 border-b border-hairline px-4 md:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div class="p-4 bg-mint-canvas rounded-2xl border border-hairline text-center">
+            <h3 class="font-display font-bold text-4xl md:text-5xl text-ink-black">150+</h3>
+            <p class="text-sm text-muted-gray font-medium mt-1">Global Universities</p>
+          </div>
+          <div class="p-4 bg-mint-canvas rounded-2xl border border-hairline text-center">
+            <h3 class="font-display font-bold text-4xl md:text-5xl text-ink-black">1,200+</h3>
+            <p class="text-sm text-muted-gray font-medium mt-1">Verified Peer Guiders</p>
+          </div>
+          <div class="p-4 bg-mint-canvas rounded-2xl border border-hairline text-center">
+            <h3 class="font-display font-bold text-4xl md:text-5xl text-ink-black">$4.2M</h3>
+            <p class="text-sm text-muted-gray font-medium mt-1">Scholarships Secured</p>
+          </div>
+          <div class="p-4 bg-mint-canvas rounded-2xl border border-hairline text-center">
+            <h3 class="font-display font-bold text-4xl md:text-5xl text-ink-black">99.2%</h3>
+            <p class="text-sm text-muted-gray font-medium mt-1">Visa Approval Rate</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Highlight Cards -->
+      <div class="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <span class="bg-mint-canvas text-ink-black px-4 py-1 rounded-full text-xs font-bold border border-ink-black">COMPLETE ADMISSION ECOSYSTEM</span>
+          <h2 class="font-display font-bold text-4xl md:text-5xl text-ink-black">Everything You Need To Study Abroad</h2>
+          <p class="text-muted-gray text-base">From exam timelines to student-verified SOPs and direct 1:1 video calls with actual students on campus.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Card 1 -->
+          <div class="bg-white border border-hairline p-8 card-jobright flex flex-col justify-between">
+            <div>
+              <div class="w-14 h-14 bg-mint-canvas rounded-2xl flex items-center justify-center text-2xl text-ink-black mb-6">
+                <i class="fa-solid fa-folder-tree"></i>
+              </div>
+              <h3 class="font-display font-bold text-2xl mb-2">Checklists & Visas</h3>
+              <p class="text-muted-gray text-sm leading-relaxed mb-6">Split into prior-admission academic transcripts and post-admission visa, health insurance, & SEVIS steps.</p>
+            </div>
+            <button onclick="switchTab('documents')" class="text-sm font-bold text-ink-black flex items-center gap-2 group">
+              View Admissions Checklist <i class="fa-solid fa-arrow-right text-mint-primary group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-white border border-hairline p-8 card-jobright flex flex-col justify-between">
+            <div>
+              <div class="w-14 h-14 bg-mint-canvas rounded-2xl flex items-center justify-center text-2xl text-ink-black mb-6">
+                <i class="fa-solid fa-pen-nib"></i>
+              </div>
+              <h3 class="font-display font-bold text-2xl mb-2">SOP & LOR Vault</h3>
+              <p class="text-muted-gray text-sm leading-relaxed mb-6">Access university-specific prompt databases, real SOP samples from successful applicants, and get line-by-line peer feedback.</p>
+            </div>
+            <button onclick="switchTab('sop-lor')" class="text-sm font-bold text-ink-black flex items-center gap-2 group">
+              Explore Sample Vault <i class="fa-solid fa-arrow-right text-mint-primary group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-white border border-hairline p-8 card-jobright flex flex-col justify-between">
+            <div>
+              <div class="w-14 h-14 bg-mint-canvas rounded-2xl flex items-center justify-center text-2xl text-ink-black mb-6">
+                <i class="fa-solid fa-video"></i>
+              </div>
+              <h3 class="font-display font-bold text-2xl mb-2">Paid 1:1 Video Calls</h3>
+              <p class="text-muted-gray text-sm leading-relaxed mb-6">Connect directly over live encrypted video with verified guiders from Harvard, Oxford, or ETH Zurich at their custom hourly rates.</p>
+            </div>
+            <button onclick="switchTab('video-space')" class="text-sm font-bold text-ink-black flex items-center gap-2 group">
+              Find Your Peer Guider <i class="fa-solid fa-arrow-right text-mint-primary group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: ADMISSIONS & DOCUMENTS CHECKLIST ================= -->
+    <section id="view-documents" class="tab-view hidden py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="mb-8">
+        <h2 class="font-display font-bold text-4xl md:text-5xl text-ink-black mb-2">Admissions & Visa Document Checklist</h2>
+        <p class="text-muted-gray">Track mandatory requirements before and after securing your acceptance letter.</p>
+      </div>
+
+      <!-- Checklist Toggle Tabs -->
+      <div class="flex items-center gap-4 border-b border-hairline mb-8">
+        <button id="doc-tab-prior" onclick="toggleDocTab('prior')" class="pb-3 text-lg font-bold border-b-2 border-ink-black text-ink-black">
+          1. Prior to Admission (Academic & Tests)
+        </button>
+        <button id="doc-tab-after" onclick="toggleDocTab('after')" class="pb-3 text-lg font-bold border-b-2 border-transparent text-muted-gray hover:text-ink-black">
+          2. After Admission (Visa, Insurance & Housing)
+        </button>
+      </div>
+
+      <!-- Progress Meter -->
+      <div class="bg-mint-canvas p-6 rounded-2xl border border-ink-black mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h4 class="font-display font-bold text-xl text-ink-black">Checklist Completion Progress</h4>
+          <p class="text-sm text-ink-black/70">Tick items off as you prepare your application folder.</p>
+        </div>
+        <div class="flex items-center gap-4 w-full sm:w-auto">
+          <div class="w-full sm:w-48 bg-white h-4 rounded-full border border-ink-black overflow-hidden">
+            <div id="doc-progress-bar" class="bg-mint-primary h-full w-1/3 transition-all duration-300"></div>
+          </div>
+          <span id="doc-progress-text" class="font-display font-bold text-lg">33%</span>
+        </div>
+      </div>
+
+      <!-- PRIOR ADMISSION DOCS LIST -->
+      <div id="docs-prior-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Official Academic Transcripts</h4>
+              <span class="bg-surface-soft text-xs font-bold px-2.5 py-1 rounded-full">Mandatory</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">WES evaluation or official sealed transcripts from your undergraduate university.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Statement of Purpose (SOP)</h4>
+              <span class="bg-surface-soft text-xs font-bold px-2.5 py-1 rounded-full">Mandatory</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">1000-1500 word essay detailing academic trajectory, research goals, and fit.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">3x Letters of Recommendation (LOR)</h4>
+              <span class="bg-surface-soft text-xs font-bold px-2.5 py-1 rounded-full">2 Academic + 1 Work</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Signed letters on official institutional letterhead from professors or supervisors.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Standardized Test Scores (GRE/GMAT)</h4>
+              <span class="bg-surface-soft text-xs font-bold px-2.5 py-1 rounded-full">University Dependent</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Official ETS/GMAC test score reports sent directly to university institution codes.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">English Proficiency Score (IELTS/TOEFL)</h4>
+              <span class="bg-surface-soft text-xs font-bold px-2.5 py-1 rounded-full">Min 7.0 / 100</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Language proficiency certificate for non-native English instruction backgrounds.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Academic CV / Resume</h4>
+              <span class="bg-surface-soft text-xs font-bold px-2.5 py-1 rounded-full">1-2 Pages</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Formatted highlight of publications, academic awards, work history, and projects.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AFTER ADMISSION DOCS LIST (Hidden by default) -->
+      <div id="docs-after-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+        
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Form I-20 / CAS Letter</h4>
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Visa Essential</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Official eligibility document issued by the university upon accepting the admission offer.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Proof of Financial Ability / Bank Solvency</h4>
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Liquid Funds</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Bank statements, loan sanction letter, or scholarship award letter covering 1 full year.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">Student Health & Overseas Travel Insurance</h4>
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Mandatory</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Comprehensive health coverage plan meeting university and visa embassy standards.</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-hairline p-6 rounded-2xl flex items-start gap-4 shadow-sm hover:border-ink-black transition-all">
+          <input type="checkbox" onchange="updateDocProgress()" class="w-6 h-6 rounded text-mint-primary focus:ring-mint-primary mt-1 accent-black cursor-pointer">
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-display font-bold text-lg">DS-160 Form / Student Visa Appointment</h4>
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Embassy Step</span>
+            </div>
+            <p class="text-sm text-muted-gray mt-1">Completed online visa application form along with SEVIS I-901 fee payment receipt.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: SOP & LOR INTERACTIVE HUB ================= -->
+    <section id="view-sop-lor" class="tab-view hidden py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-4xl md:text-5xl text-ink-black mb-2">SOP & LOR Intelligence Hub</h2>
+          <p class="text-muted-gray">Explore university-specific essay prompts, real guider SOP samples, and request peer reviews.</p>
+        </div>
+        <button onclick="openSOPReviewModal()" class="btn-pill-black px-6 py-3 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-file-signature text-mint-primary"></i>
+          <span>Submit SOP for Peer Review</span>
+        </button>
+      </div>
+
+      <!-- University Prompt Selector Dropdown -->
+      <div class="bg-surface-soft p-6 rounded-2xl border border-hairline mb-10">
+        <label class="block font-display font-bold text-lg text-ink-black mb-2">Select Target University for Specific SOP/LOR Prompts:</label>
+        <select id="sop-univ-select" onchange="updateSOPPrompts()" class="w-full md:w-1/2 p-3 rounded-xl border border-hairline bg-white font-medium text-ink-black focus:outline-none focus:ring-2 focus:ring-mint-primary">
+          <option value="stanford">Stanford University — M.S. Computer Science</option>
+          <option value="oxford">University of Oxford — M.Sc. Higher Education</option>
+          <option value="eth">ETH Zurich — Master in Robotics & Systems</option>
+          <option value="nus">National University of Singapore (NUS) — MBA</option>
+        </select>
+
+        <!-- Dynamic University Details Card -->
+        <div id="sop-prompt-card" class="mt-6 bg-white p-6 rounded-xl border border-hairline">
+          <!-- Populated via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Section 4: Example SOPs from Peer Guiders -->
+      <h3 class="font-display font-bold text-3xl mb-6">Guider Verified SOP & LOR Samples</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Sample 1 -->
+        <div class="bg-white border border-hairline p-6 card-jobright">
+          <div class="flex justify-between items-center mb-4">
+            <span class="bg-mint-canvas text-ink-black text-xs font-bold px-3 py-1 rounded-full border border-ink-black">ACCEPTED AT STANFORD</span>
+            <span class="text-xs text-muted-gray">Submitted by Guider: Alex M.</span>
+          </div>
+          <h4 class="font-display font-bold text-xl mb-2">Statement of Purpose — AI & Machine Learning Specialization</h4>
+          <p class="text-sm text-muted-gray line-clamp-3 mb-4">"My fascination with neural architectures began during my undergraduate thesis on graph convolutional networks. At Stanford, I aim to work alongside..."</p>
+          <button onclick="openSampleModal('Stanford CS SOP', 'Full text of Stanford SOP sample...')" class="text-sm font-bold text-ink-black underline hover:text-muted-gray">Read Full Sample Document →</button>
+        </div>
+
+        <!-- Sample 2 -->
+        <div class="bg-white border border-hairline p-6 card-jobright">
+          <div class="flex justify-between items-center mb-4">
+            <span class="bg-mint-canvas text-ink-black text-xs font-bold px-3 py-1 rounded-full border border-ink-black">ACCEPTED AT OXFORD</span>
+            <span class="text-xs text-muted-gray">Submitted by Guider: Elena R.</span>
+          </div>
+          <h4 class="font-display font-bold text-xl mb-2">Professor LOR Sample — Academic Recommendation</h4>
+          <p class="text-sm text-muted-gray line-clamp-3 mb-4">"It gives me immense pleasure to recommend Elena for admission to Oxford. As her Department Head, I witnessed her publish two Q1 journal papers..."</p>
+          <button onclick="openSampleModal('Oxford LOR Sample', 'Full text of Oxford Recommendation letter...')" class="text-sm font-bold text-ink-black underline hover:text-muted-gray">Read Full Sample Document →</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: EXAMS, SYLLABUS & DATE TRACKER ================= -->
+    <section id="view-exams" class="tab-view hidden py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="mb-8">
+        <h2 class="font-display font-bold text-4xl md:text-5xl text-ink-black mb-2">Exams, Syllabus & Live Date Tracker</h2>
+        <p class="text-muted-gray">Master exam blueprints, set interactive deadline trackers, and sync events directly to your calendar.</p>
+      </div>
+
+      <!-- Exam Selector & Tracker Controls -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        
+        <!-- Left Column: Syllabus Tabs & Details -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-hairline">
+          <h3 class="font-display font-bold text-2xl mb-4">Standardized Exams Directory</h3>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <button onclick="loadExamSyllabus('gre')" class="exam-btn bg-ink-black text-white px-4 py-2 rounded-xl text-sm font-bold">GRE General</button>
+            <button onclick="loadExamSyllabus('ielts')" class="exam-btn bg-surface-soft text-ink-black px-4 py-2 rounded-xl text-sm font-bold hover:bg-hairline">IELTS Academic</button>
+            <button onclick="loadExamSyllabus('toefl')" class="exam-btn bg-surface-soft text-ink-black px-4 py-2 rounded-xl text-sm font-bold hover:bg-hairline">TOEFL iBT</button>
+            <button onclick="loadExamSyllabus('gmat')" class="exam-btn bg-surface-soft text-ink-black px-4 py-2 rounded-xl text-sm font-bold hover:bg-hairline">GMAT Focus</button>
+          </div>
+
+          <div id="exam-syllabus-box" class="space-y-4">
+            <!-- Loaded via Javascript -->
+          </div>
+        </div>
+
+        <!-- Right Column: Date Tracker Setup & Calendar Export -->
+        <div class="lg:col-span-5 bg-mint-canvas p-6 card-jobright border-2 border-ink-black flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wider">
+              <i class="fa-solid fa-clock-rotate-left text-base"></i> Configure Background Exam Tracker
+            </div>
+            <h3 class="font-display font-bold text-3xl mb-2">Set Target Exam Date</h3>
+            <p class="text-sm text-ink-black/80 mb-6">Setting your date will pin an active countdown banner to your platform homepage dashboard.</p>
+
+            <form id="tracker-form" onsubmit="saveExamTracker(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold uppercase mb-1">Select Exam:</label>
+                <select id="tracker-exam-select" class="w-full p-3 rounded-xl border border-ink-black bg-white font-semibold">
+                  <option value="GRE General Test">GRE General Test</option>
+                  <option value="IELTS Academic">IELTS Academic</option>
+                  <option value="TOEFL iBT">TOEFL iBT Exam</option>
+                  <option value="GMAT Focus Edition">GMAT Focus Edition</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase mb-1">Select Exam Date:</label>
+                <input type="date" id="tracker-date-input" required class="w-full p-3 rounded-xl border border-ink-black bg-white font-semibold">
+              </div>
+
+              <button type="submit" class="w-full btn-pill-black py-3 text-sm">
+                Set Homepage Background Tracker
+              </button>
+            </form>
+          </div>
+
+          <!-- Calendar ICS Export Button -->
+          <div class="pt-6 border-t border-ink-black/20 mt-6">
+            <h4 class="font-display font-bold text-base mb-2">Calendar Export Shortcut</h4>
+            <button onclick="downloadCalendarEvent()" class="w-full btn-pill-mint py-3 text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-calendar-plus"></i>
+              <span>Download .ICS / Sync Calendar</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: SCHOLARSHIPS DATABASE ================= -->
+    <section id="view-scholarships" class="tab-view hidden py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="mb-8">
+        <h2 class="font-display font-bold text-4xl md:text-5xl text-ink-black mb-2">Financial Aid & Scholarship Directory</h2>
+        <p class="text-muted-gray">Filter fully-funded global grants, merit awards, and university assistantships.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-surface-soft p-4 rounded-2xl border border-hairline mb-8 flex flex-wrap gap-4 items-center justify-between">
+        <div class="flex flex-wrap gap-4 items-center flex-1">
+          <input type="text" id="sch-search" oninput="filterScholarships()" placeholder="Search by scholarship name or university..." class="p-2.5 px-4 rounded-xl border border-hairline bg-white text-sm min-w-[240px] focus:outline-none">
+          
+          <select id="sch-region" onchange="filterScholarships()" class="p-2.5 rounded-xl border border-hairline bg-white text-sm font-medium">
+            <option value="all">All Regions</option>
+            <option value="usa">USA</option>
+            <option value="uk">UK</option>
+            <option value="europe">Europe</option>
+            <option value="asia">Asia / Singapore</option>
+          </select>
+
+          <select id="sch-type" onchange="filterScholarships()" class="p-2.5 rounded-xl border border-hairline bg-white text-sm font-medium">
+            <option value="all">All Coverage</option>
+            <option value="full">Full Tuition + Stipend</option>
+            <option value="partial">Partial Aid</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Scholarships List Container -->
+      <div id="scholarships-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Populated via Javascript -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 6: PAID 1:1 VIDEO CALLING SPACE ================= -->
+    <section id="view-video-space" class="tab-view hidden py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-4xl md:text-5xl text-ink-black mb-2">1:1 Guider Video Space & Peer Mentorship</h2>
+          <p class="text-muted-gray">Connect directly with actual students at your target universities. Peer guiders set custom session rates.</p>
+        </div>
+        <div class="bg-mint-canvas border border-ink-black px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>12 Guiders Online for Immediate Booking</span>
+        </div>
+      </div>
+
+      <!-- Guiders Cards Directory -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        
+        <!-- Guider 1 -->
+        <div class="bg-white border border-hairline p-6 card-jobright flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-16 h-16 rounded-full bg-slate-900 text-mint-primary flex items-center justify-center font-bold text-xl border-2 border-mint-primary">
+                JD
+              </div>
+              <div>
+                <h4 class="font-display font-bold text-xl leading-tight">Julian Das</h4>
+                <p class="text-xs text-muted-gray">Stanford University '25</p>
+                <span class="inline-block bg-mint-canvas text-ink-black text-[11px] font-bold px-2 py-0.5 rounded border border-ink-black mt-1">M.S. Computer Science</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-muted-gray leading-relaxed mb-4">
+              "Helped 40+ students craft winning tech SOPs. Specializing in AI research assistantships and TA applications."
+            </p>
+
+            <div class="bg-surface-soft p-3 rounded-xl flex items-center justify-between text-sm mb-6">
+              <span class="font-bold text-ink-black">Session Rate:</span>
+              <span class="font-display font-bold text-lg text-emerald-600">$35 / 30 mins</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <button onclick="openBookingModal('Julian Das', '$35', 'Stanford University')" class="w-full btn-pill-black py-2.5 text-xs">Book 1:1 Video Session</button>
+            <button onclick="openSampleModal('Julian\'s Verified SOP', 'Preview Julian\'s Stanford SOP...')" class="w-full text-xs font-semibold text-muted-gray hover:text-ink-black text-center py-1">View Guider SOP Preview</button>
+          </div>
+        </div>
+
+        <!-- Guider 2 -->
+        <div class="bg-white border border-hairline p-6 card-jobright flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-16 h-16 rounded-full bg-slate-900 text-mint-primary flex items-center justify-center font-bold text-xl border-2 border-mint-primary">
+                SK
+              </div>
+              <div>
+                <h4 class="font-display font-bold text-xl leading-tight">Sophia Khan</h4>
+                <p class="text-xs text-muted-gray">University of Oxford '24</p>
+                <span class="inline-block bg-mint-canvas text-ink-black text-[11px] font-bold px-2 py-0.5 rounded border border-ink-black mt-1">Rhodes Scholar</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-muted-gray leading-relaxed mb-4">
+              "Oxford Rhodes Scholar with deep knowledge on UK scholarship interviews, college selection, and visa processing."
+            </p>
+
+            <div class="bg-surface-soft p-3 rounded-xl flex items-center justify-between text-sm mb-6">
+              <span class="font-bold text-ink-black">Session Rate:</span>
+              <span class="font-display font-bold text-lg text-emerald-600">$45 / 30 mins</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <button onclick="openBookingModal('Sophia Khan', '$45', 'Oxford University')" class="w-full btn-pill-black py-2.5 text-xs">Book 1:1 Video Session</button>
+            <button onclick="openSampleModal('Sophia\'s Oxford Profile', 'Preview Sophia\'s Oxford Essay...')" class="w-full text-xs font-semibold text-muted-gray hover:text-ink-black text-center py-1">View Guider SOP Preview</button>
+          </div>
+        </div>
+
+        <!-- Guider 3 -->
+        <div class="bg-white border border-hairline p-6 card-jobright flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-16 h-16 rounded-full bg-slate-900 text-mint-primary flex items-center justify-center font-bold text-xl border-2 border-mint-primary">
+                LW
+              </div>
+              <div>
+                <h4 class="font-display font-bold text-xl leading-tight">Lukas Weber</h4>
+                <p class="text-xs text-muted-gray">ETH Zurich '25</p>
+                <span class="inline-block bg-mint-canvas text-ink-black text-[11px] font-bold px-2 py-0.5 rounded border border-ink-black mt-1">Robotics & Systems</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-muted-gray leading-relaxed mb-4">
+              "Guiding European master's applicants through prerequisites, portfolio reviews, and Schengen student visas."
+            </p>
+
+            <div class="bg-surface-soft p-3 rounded-xl flex items-center justify-between text-sm mb-6">
+              <span class="font-bold text-ink-black">Session Rate:</span>
+              <span class="font-display font-bold text-lg text-emerald-600">$28 / 30 mins</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <button onclick="openBookingModal('Lukas Weber', '$28', 'ETH Zurich')" class="w-full btn-pill-black py-2.5 text-xs">Book 1:1 Video Session</button>
+            <button onclick="openSampleModal('Lukas\'s Portfolio', 'Preview Lukas\'s ETH Zurich docs...')" class="w-full text-xs font-semibold text-muted-gray hover:text-ink-black text-center py-1">View Guider SOP Preview</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Interactive Video Call Simulator Interface -->
+      <div class="bg-ink-black text-white p-6 md:p-8 rounded-3xl border-2 border-mint-primary">
+        <div class="flex items-center justify-between pb-6 border-b border-white/20 mb-6">
+          <div class="flex items-center gap-3">
+            <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
+            <h3 class="font-display font-bold text-xl text-white">Live Encrypted Video Room Preview</h3>
+          </div>
+          <span class="text-xs bg-white/10 px-3 py-1 rounded-full text-mint-primary font-mono">ROOM ID: #GB-8842-STANFORD</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Video Screen Area -->
+          <div class="lg:col-span-8 bg-slate-900 rounded-2xl h-80 relative overflow-hidden flex items-center justify-center border border-white/10">
+            <div class="text-center space-y-3">
+              <div class="w-20 h-20 bg-mint-primary/20 text-mint-primary rounded-full flex items-center justify-center text-3xl mx-auto border border-mint-primary">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+              <p class="text-sm font-semibold text-white/80">Connecting Video Call Stream with Peer Mentor...</p>
+              <p class="text-xs text-muted-gray">High Definition 1080p WebRTC Encrypted</p>
+            </div>
+
+            <!-- Floating Self Video Badge -->
+            <div class="absolute bottom-4 right-4 w-32 h-24 bg-black rounded-xl border border-white/30 flex items-center justify-center text-xs font-bold">
+              You (Student)
+            </div>
+          </div>
+
+          <!-- Live Chat & Call Controls -->
+          <div class="lg:col-span-4 bg-white/5 p-6 rounded-2xl border border-white/10 flex flex-col justify-between h-80">
+            <div>
+              <h4 class="font-display font-bold text-lg text-mint-primary mb-2">Live Session Chat</h4>
+              <div class="space-y-2 text-xs h-40 overflow-y-auto pr-2">
+                <div class="bg-white/10 p-2 rounded-lg"><strong>System:</strong> Session started with Julian (Stanford).</div>
+                <div class="bg-white/10 p-2 rounded-lg"><strong>Julian:</strong> Hey! Glad to review your CS SOP draft today.</div>
+              </div>
+            </div>
+
+            <!-- Call Control Buttons -->
+            <div class="flex items-center justify-center gap-4 pt-4 border-t border-white/10">
+              <button onclick="alert('Mic toggled')" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-microphone"></i></button>
+              <button onclick="alert('Camera toggled')" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-video"></i></button>
+              <button onclick="alert('Screen sharing initiated')" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-desktop"></i></button>
+              <button onclick="alert('Call ended')" class="w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center text-white"><i class="fa-solid fa-phone-slash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 7: GUIDER DASHBOARD VIEW (SWITCHED VIA ROLE TOGGLE) ================= -->
+    <section id="view-guider-dash" class="tab-view hidden py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      <div class="bg-mint-canvas p-6 rounded-2xl border border-ink-black mb-8 flex items-center justify-between">
+        <div>
+          <span class="bg-ink-black text-white text-xs font-bold px-3 py-1 rounded-full">GUIDER MODE ACTIVE</span>
+          <h2 class="font-display font-bold text-3xl md:text-4xl text-ink-black mt-2">Mentor Command Center</h2>
+          <p class="text-sm text-ink-black/80">Manage session pricing, incoming SOP review requests, and video calls.</p>
+        </div>
+        <div class="text-right">
+          <div class="text-xs uppercase font-bold text-muted-gray">Total Monthly Earnings</div>
+          <div class="font-display font-bold text-3xl text-emerald-600">$840.00</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: SOP Review Queue -->
+        <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-hairline">
+          <h3 class="font-display font-bold text-2xl mb-4">Pending Student SOP Reviews Queue</h3>
+          
+          <div class="space-y-4">
+            <div class="p-4 bg-surface-soft rounded-xl border border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h4 class="font-bold text-base">Rahul Sharma — MS CS Applicant</h4>
+                <p class="text-xs text-muted-gray">Target: Stanford University | Submitted 2 hours ago</p>
+              </div>
+              <button onclick="openGuiderReviewModal('Rahul Sharma')" class="btn-pill-black px-4 py-2 text-xs">
+                Review SOP Line-by-Line
+              </button>
+            </div>
+
+            <div class="p-4 bg-surface-soft rounded-xl border border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h4 class="font-bold text-base">Mei Lin — MBA Candidate</h4>
+                <p class="text-xs text-muted-gray">Target: NUS Singapore | Submitted 1 day ago</p>
+              </div>
+              <button onclick="openGuiderReviewModal('Mei Lin')" class="btn-pill-black px-4 py-2 text-xs">
+                Review SOP Line-by-Line
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Rates & Availability Settings -->
+        <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-hairline space-y-6">
+          <h3 class="font-display font-bold text-2xl">Hourly Rate & Call Controls</h3>
+
+          <form onsubmit="alert('Guider rate updated successfully!'); return false;" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase mb-1">Set 30-Min Call Rate ($):</label>
+              <input type="number" value="35" min="10" max="200" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft font-bold text-lg">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase mb-1">University Edu Email Status:</label>
+              <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-300 text-xs text-emerald-800 font-bold flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                <span>Verified (.edu / Oxford Email)</span>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full btn-pill-mint py-3 text-sm">Save Guider Settings</button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 8. FOOTER ================= -->
+  <footer class="bg-white border-t border-hairline py-16 px-4 md:px-8 mt-20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-ink-black text-mint-primary flex items-center justify-center font-bold text-lg">G</div>
+          <span class="font-display font-bold text-xl">GlobalPath.ai</span>
+        </div>
+        <p class="text-xs text-muted-gray leading-relaxed">
+          The high-energy AI platform connecting global study abroad aspirants with verified peer guiders, SOP vault tools, and exam trackers.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-display font-bold text-sm uppercase mb-4 text-ink-black">Platform Hubs</h4>
+        <ul class="space-y-2 text-xs text-muted-gray font-medium">
+          <li><button onclick="switchTab('documents')" class="hover:text-ink-black">Admissions Checklist</button></li>
+          <li><button onclick="switchTab('sop-lor')" class="hover:text-ink-black">SOP & LOR Vault</button></li>
+          <li><button onclick="switchTab('exams')" class="hover:text-ink-black">Exam Date Tracker</button></li>
+          <li><button onclick="switchTab('scholarships')" class="hover:text-ink-black">Scholarship Search</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display font-bold text-sm uppercase mb-4 text-ink-black">Top Destinations</h4>
+        <ul class="space-y-2 text-xs text-muted-gray font-medium">
+          <li><a href="#" class="hover:text-ink-black">Study in USA (Harvard, Stanford)</a></li>
+          <li><a href="#" class="hover:text-ink-black">Study in UK (Oxford, Cambridge)</a></li>
+          <li><a href="#" class="hover:text-ink-black">Study in Switzerland (ETH)</a></li>
+          <li><a href="#" class="hover:text-ink-black">Study in Singapore (NUS, NTU)</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display font-bold text-sm uppercase mb-4 text-ink-black">Stay Connected</h4>
+        <p class="text-xs text-muted-gray mb-3">Get weekly deadline alerts directly to your inbox.</p>
+        <div class="flex gap-2">
+          <input type="email" placeholder="Your email..." class="p-2.5 rounded-xl border border-hairline text-xs w-full focus:outline-none">
+          <button onclick="alert('Subscribed to alerts!')" class="btn-pill-black px-4 py-2 text-xs">Join</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto pt-8 border-t border-hairline flex flex-col sm:flex-row items-center justify-between text-xs text-muted-gray gap-4">
+      <p>© 2026 GlobalPath.ai Inc. Built on Jobright Design System Spec.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-ink-black">Privacy Policy</a>
+        <a href="#" class="hover:text-ink-black">Terms of Service</a>
+        <a href="#" class="hover:text-ink-black">Security</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ================= MODALS CONTAINER ================= -->
+
+  <!-- A. REGISTRATION / ONBOARDING MODAL (STUDENT & GUIDER DUAL ROLE) -->
+  <div id="modal-register" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-2xl w-full rounded-3xl p-6 md:p-8 card-jobright border-2 border-ink-black max-h-[90vh] overflow-y-auto relative">
+      <button onclick="closeModal('modal-register')" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-black font-bold">✕</button>
+
+      <div class="mb-6 text-center">
+        <h3 class="font-display font-bold text-3xl text-ink-black">Join GlobalPath.ai</h3>
+        <p class="text-xs text-muted-gray mt-1">Select your account role to customize your onboarding workflow.</p>
+
+        <!-- Role Selector Buttons -->
+        <div class="flex justify-center gap-4 mt-4">
+          <button id="reg-role-student-btn" onclick="setRegisterRole('student')" class="btn-pill-black px-6 py-2 text-xs">Student Registration</button>
+          <button id="reg-role-guider-btn" onclick="setRegisterRole('guider')" class="bg-surface-soft text-ink-black border border-hairline px-6 py-2 text-xs rounded-full font-semibold">Guider / Mentor Registration</button>
+        </div>
+      </div>
+
+      <!-- FORM FOR STUDENT REGISTRATION -->
+      <form id="form-register-student" onsubmit="handleRegistrationSubmit(event, 'student')" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Full Name</label>
+            <input type="text" required placeholder="John Doe" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Email Address</label>
+            <input type="email" required placeholder="john@example.com" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Country Code</label>
+            <select class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm font-medium">
+              <option>🇺🇸 +1 (USA)</option>
+              <option>🇬🇧 +44 (UK)</option>
+              <option>🇮🇳 +91 (India)</option>
+              <option>🇨🇦 +1 (Canada)</option>
+              <option>🇦🇺 +61 (Australia)</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold uppercase mb-1">Phone Number</label>
+            <input type="tel" required placeholder="9876543210" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Home Address</label>
+          <input type="text" required placeholder="City, State, Country" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+        </div>
+
+        <!-- College Preferences (Min 3, Max 20 Validation) -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-xs font-bold uppercase">College Preferences (Min 3, Max 20)</label>
+            <span id="college-count-badge" class="text-xs font-bold text-muted-gray">Selected: <span id="college-count">0</span>/20</span>
+          </div>
+          
+          <div class="flex gap-2 mb-2">
+            <input type="text" id="college-input" placeholder="Type university (e.g., Stanford) and click Add" class="flex-1 p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+            <button type="button" onclick="addCollegePref()" class="btn-pill-black px-4 py-2 text-xs">Add</button>
+          </div>
+
+          <!-- Dynamic Tags Container -->
+          <div id="college-tags-container" class="flex flex-wrap gap-2 p-3 bg-surface-soft rounded-xl min-h-[60px] border border-hairline">
+            <!-- Tags rendered via JS -->
+          </div>
+          <p id="college-error-msg" class="text-xs text-red-500 hidden mt-1">Please select at least 3 universities before proceeding.</p>
+        </div>
+
+        <button type="submit" class="w-full btn-pill-black py-3 text-sm mt-4">Complete Student Registration</button>
+      </form>
+
+      <!-- FORM FOR GUIDER REGISTRATION -->
+      <form id="form-register-guider" onsubmit="handleRegistrationSubmit(event, 'guider')" class="space-y-4 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Full Name</label>
+            <input type="text" required placeholder="Alex Mercer" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">University (.edu) Email</label>
+            <div class="flex gap-2">
+              <input type="email" id="guider-edu-email" required placeholder="alex@stanford.edu" class="flex-1 p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+              <button type="button" onclick="sendEduOTP()" class="bg-ink-black text-white px-3 text-xs rounded-xl font-bold">Send OTP</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulated OTP Verification Box -->
+        <div id="otp-box" class="p-3 bg-mint-canvas rounded-xl border border-ink-black hidden">
+          <label class="block text-xs font-bold uppercase mb-1 text-ink-black">Enter 4-Digit OTP sent to .edu email:</label>
+          <div class="flex gap-2">
+            <input type="text" maxlength="4" value="1234" class="p-2 rounded-lg border border-hairline text-center font-bold tracking-widest w-32">
+            <button type="button" onclick="verifyOTP()" class="btn-pill-black px-4 text-xs">Verify OTP</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Hourly Session Charge ($/hr)</label>
+            <input type="number" required placeholder="e.g. 40" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Current College / University</label>
+            <input type="text" required placeholder="Stanford University" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Upload Your Accepted SOP Document (Mandatory for Guiders)</label>
+          <input type="file" required class="w-full p-2.5 rounded-xl border border-hairline bg-surface-soft text-xs">
+          <textarea rows="3" placeholder="Or paste full SOP text summary here..." class="w-full p-3 mt-2 rounded-xl border border-hairline bg-surface-soft text-sm"></textarea>
+        </div>
+
+        <button type="submit" class="w-full btn-pill-mint py-3 text-sm mt-4">Complete Guider Onboarding</button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- B. BOOKING & PAYMENT MODAL FOR VIDEO CALL -->
+  <div id="modal-booking" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-lg w-full rounded-3xl p-6 md:p-8 card-jobright border-2 border-ink-black relative">
+      <button onclick="closeModal('modal-booking')" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-black font-bold">✕</button>
+
+      <h3 class="font-display font-bold text-2xl text-ink-black mb-1">Book 1:1 Video Session</h3>
+      <p id="book-guider-info" class="text-xs text-muted-gray mb-6">Guider: Julian Das (Stanford)</p>
+
+      <form onsubmit="processBookingPayment(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Select Available Time Slot:</label>
+          <select class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm font-medium">
+            <option>Tomorrow — 4:00 PM EST</option>
+            <option>Tomorrow — 6:30 PM EST</option>
+            <option>Saturday — 10:00 AM EST</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Session Total:</label>
+          <div id="book-price-display" class="p-3 bg-mint-canvas rounded-xl font-display font-bold text-2xl text-ink-black border border-ink-black">
+            $35.00
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-hairline">
+          <label class="block text-xs font-bold uppercase mb-2">Payment Method Simulation:</label>
+          <input type="text" placeholder="4242 •••• •••• 4242" value="4242424242424242" class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm mb-3">
+          <button type="submit" class="w-full btn-pill-black py-3 text-sm">Pay & Reserve Video Call Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- C. SAMPLE VIEW MODAL -->
+  <div id="modal-sample" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-2xl w-full rounded-3xl p-6 md:p-8 card-jobright border-2 border-ink-black relative">
+      <button onclick="closeModal('modal-sample')" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-black font-bold">✕</button>
+      <h3 id="sample-modal-title" class="font-display font-bold text-2xl mb-4">Sample Title</h3>
+      <div id="sample-modal-body" class="bg-surface-soft p-4 rounded-xl text-sm text-ink-black font-mono leading-relaxed h-64 overflow-y-auto mb-4">
+        Sample Content...
+      </div>
+      <button onclick="closeModal('modal-sample')" class="w-full btn-pill-black py-2.5 text-xs">Close Preview</button>
+    </div>
+  </div>
+
+  <!-- D. GUIDER REVIEW MODAL (GUIDER DASHBOARD) -->
+  <div id="modal-guider-review" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-3xl w-full rounded-3xl p-6 md:p-8 card-jobright border-2 border-ink-black relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('modal-guider-review')" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-black font-bold">✕</button>
+      
+      <h3 id="review-student-name" class="font-display font-bold text-2xl text-ink-black mb-2">Reviewing SOP for Rahul Sharma</h3>
+      <p class="text-xs text-muted-gray mb-4">Highlight text or add inline feedback for the student.</p>
+
+      <div class="bg-surface-soft p-4 rounded-xl text-xs leading-relaxed space-y-3 mb-6 font-mono">
+        <p class="p-2 bg-white rounded border border-hairline">"Ever since my second year at IIT, I realized that artificial intelligence was my true calling..." <span class="bg-mint-primary text-black px-1 font-bold">[Guider Comment: Excellent hook!]</span></p>
+        <p class="p-2 bg-white rounded border border-hairline">"I want to join Stanford because it has nice buildings and good weather..." <span class="bg-red-200 text-red-800 px-1 font-bold">[Guider Comment: Too vague. Mention specific professors like Dr. Andrew Ng]</span></p>
+      </div>
+
+      <textarea placeholder="Write overall final feedback for student..." class="w-full p-3 rounded-xl border border-hairline bg-surface-soft text-sm mb-4"></textarea>
+      <button onclick="alert('Feedback sent to student successfully!'); closeModal('modal-guider-review')" class="w-full btn-pill-mint py-3 text-sm">Submit Review to Student</button>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    /* ================= APP STATE & INITIALIZATION ================= */
+    let currentRole = 'student'; // 'student' or 'guider'
+    let collegePreferences = ['Stanford University', 'University of Oxford', 'ETH Zurich'];
+    
+    // Exam Syllabus Data
+    const examData = {
+      gre: {
+        title: 'GRE General Test Blueprint',
+        sections: [
+          { name: 'Analytical Writing', score: '0 - 6.0 Score', detail: '1 Issue Essay (30 mins)' },
+          { name: 'Verbal Reasoning', score: '130 - 170 Score', detail: '20 Questions per section (Text Completion, Reading Comp)' },
+          { name: 'Quantitative Reasoning', score: '130 - 170 Score', detail: '20 Questions per section (Algebra, Geometry, Data Analysis)' }
+        ]
+      },
+      ielts: {
+        title: 'IELTS Academic Exam Structure',
+        sections: [
+          { name: 'Listening', score: 'Band 1 - 9', detail: '30 minutes (4 Audio recordings)' },
+          { name: 'Reading', score: 'Band 1 - 9', detail: '60 minutes (3 Academic texts)' },
+          { name: 'Writing', score: 'Band 1 - 9', detail: '60 minutes (Task 1 Chart & Task 2 Essay)' },
+          { name: 'Speaking', score: 'Band 1 - 9', detail: '11-14 minutes (Face-to-face interview)' }
+        ]
+      },
+      toefl: {
+        title: 'TOEFL iBT Test Blueprint',
+        sections: [
+          { name: 'Reading', score: '0 - 30 Marks', detail: '20 Questions (35 minutes)' },
+          { name: 'Listening', score: '0 - 30 Marks', detail: '28 Questions (36 minutes)' },
+          { name: 'Speaking', score: '0 - 30 Marks', detail: '4 Tasks (16 minutes)' },
+          { name: 'Writing', score: '0 - 30 Marks', detail: '2 Tasks (29 minutes)' }
+        ]
+      },
+      gmat: {
+        title: 'GMAT Focus Edition Breakdown',
+        sections: [
+          { name: 'Quantitative Reasoning', score: '60 - 90 Score', detail: '21 Questions (45 minutes)' },
+          { name: 'Verbal Reasoning', score: '60 - 90 Score', detail: '23 Questions (45 minutes)' },
+          { name: 'Data Insights', score: '60 - 90 Score', detail: '20 Questions (45 minutes)' }
+        ]
+      }
+    };
+
+    // Scholarships Data
+    const scholarshipsData = [
+      { name: 'Fulbright Foreign Student Program', region: 'usa', type: 'full', amount: '$50,000 / yr', desc: 'Full tuition, airfare, living stipend, and health insurance for Master/PhD in USA.' },
+      { name: 'Chevening UK Government Scholarship', region: 'uk', type: 'full', amount: '100% Tuition + Monthly Stipend', desc: 'Fully-funded one-year Master degree at any top UK university.' },
+      { name: 'ETH Zurich Excellence Opportunity Award', region: 'europe', type: 'full', amount: 'CHF 12,000 / semester', desc: 'Covers study and living costs for outstanding Master students at ETH Zurich.' },
+      { name: 'NUS Graduate School Scholarship', region: 'asia', type: 'partial', amount: 'S$2,200 Monthly Stipend', desc: 'Tuition fee waiver and monthly allowance for top Asian university applicants.' }
+    ];
+
+    window.onload = function() {
+      renderCollegeTags();
+      loadExamSyllabus('gre');
+      filterScholarships();
+      updateSOPPrompts();
+      
+      // Set default tracker date to 45 days in future
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 42);
+      document.getElementById('tracker-date-input').value = targetDate.toISOString().split('T')[0];
+    };
+
+    /* ================= TAB NAVIGATION ================= */
+    function switchTab(tabId) {
+      const views = document.querySelectorAll('.tab-view');
+      views.forEach(v => v.classList.add('hidden'));
+
+      if(tabId === 'guider-dash') {
+        document.getElementById('view-guider-dash').classList.remove('hidden');
+      } else {
+        const target = document.getElementById('view-' + tabId);
+        if(target) target.classList.remove('hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    /* ================= USER ROLE SWITCHER (STUDENT / GUIDER) ================= */
+    function toggleUserRole(role) {
+      currentRole = role;
+      const studentBtn = document.getElementById('view-student-btn');
+      const guiderBtn = document.getElementById('view-guider-btn');
+
+      if (role === 'guider') {
+        guiderBtn.className = "px-3 py-1 rounded-full bg-white text-ink-black shadow-sm transition-all";
+        studentBtn.className = "px-3 py-1 rounded-full text-muted-gray hover:text-ink-black transition-all";
+        switchTab('guider-dash');
+      } else {
+        studentBtn.className = "px-3 py-1 rounded-full bg-white text-ink-black shadow-sm transition-all";
+        guiderBtn.className = "px-3 py-1 rounded-full text-muted-gray hover:text-ink-black transition-all";
+        switchTab('home');
+      }
+    }
+
+    /* ================= COLLEGE PREFERENCES MULTI-SELECT (MIN 3, MAX 20) ================= */
+    function renderCollegeTags() {
+      const container = document.getElementById('college-tags-container');
+      const countDisplay = document.getElementById('college-count');
+      const errorMsg = document.getElementById('college-error-msg');
+
+      container.innerHTML = '';
+      collegePreferences.forEach((college, index) => {
+        const tag = document.createElement('span');
+        tag.className = 'inline-flex items-center gap-1.5 bg-white text-ink-black text-xs font-bold px-3 py-1.5 rounded-full border border-ink-black';
+        tag.innerHTML = `🎓 ${college} <button type="button" onclick="removeCollegePref(${index})" class="text-muted-gray hover:text-red-500 font-bold ml-1">✕</button>`;
+        container.appendChild(tag);
+      });
+
+      countDisplay.textContent = collegePreferences.length;
+
+      if (collegePreferences.length >= 3) {
+        errorMsg.classList.add('hidden');
+      }
+    }
+
+    function addCollegePref() {
+      const input = document.getElementById('college-input');
+      const val = input.value.trim();
+
+      if (!val) return;
+      if (collegePreferences.length >= 20) {
+        alert('Maximum limit of 20 college preferences reached.');
+        return;
+      }
+      if (collegePreferences.includes(val)) {
+        alert('College already added!');
+        return;
+      }
+
+      collegePreferences.push(val);
+      input.value = '';
+      renderCollegeTags();
+    }
+
+    function removeCollegePref(index) {
+      collegePreferences.splice(index, 1);
+      renderCollegeTags();
+    }
+
+    /* ================= DOCUMENT CHECKLIST PROGRESS ================= */
+    function toggleDocTab(type) {
+      const priorContainer = document.getElementById('docs-prior-container');
+      const afterContainer = document.getElementById('docs-after-container');
+      const tabPrior = document.getElementById('doc-tab-prior');
+      const tabAfter = document.getElementById('doc-tab-after');
+
+      if (type === 'prior') {
+        priorContainer.classList.remove('hidden');
+        afterContainer.classList.add('hidden');
+        tabPrior.className = "pb-3 text-lg font-bold border-b-2 border-ink-black text-ink-black";
+        tabAfter.className = "pb-3 text-lg font-bold border-b-2 border-transparent text-muted-gray hover:text-ink-black";
+      } else {
+        priorContainer.classList.add('hidden');
+        afterContainer.classList.remove('hidden');
+        tabAfter.className = "pb-3 text-lg font-bold border-b-2 border-ink-black text-ink-black";
+        tabPrior.className = "pb-3 text-lg font-bold border-b-2 border-transparent text-muted-gray hover:text-ink-black";
+      }
+    }
+
+    function updateDocProgress() {
+      const activeContainer = document.querySelector('.tab-view#view-documents');
+      const checkboxes = activeContainer.querySelectorAll('input[type="checkbox"]');
+      let checkedCount = 0;
+
+      checkboxes.forEach(cb => { if(cb.checked) checkedCount++; });
+
+      const percentage = Math.round((checkedCount / checkboxes.length) * 100);
+      document.getElementById('doc-progress-bar').style.width = percentage + '%';
+      document.getElementById('doc-progress-text').textContent = percentage + '%';
+    }
+
+    /* ================= SOP / LOR PROMPT SELECTOR ================= */
+    function updateSOPPrompts() {
+      const univ = document.getElementById('sop-univ-select').value;
+      const card = document.getElementById('sop-prompt-card');
+
+      if (univ === 'stanford') {
+        card.innerHTML = `
+          <h4 class="font-display font-bold text-xl mb-2 text-ink-black">Stanford M.S. CS — Official SOP & LOR Directives</h4>
+          <p class="text-sm text-muted-gray mb-3"><strong>SOP Prompt:</strong> Describe your reasons for applying to Stanford, your preparation in field, research interests, and future career plans. (Max 2 pages).</p>
+          <div class="text-xs bg-surface-soft p-3 rounded-lg border border-hairline">
+            <strong>LOR Requirement:</strong> 3 Letters required (At least 2 from CS faculty members).
+          </div>
+        `;
+      } else if (univ === 'oxford') {
+        card.innerHTML = `
+          <h4 class="font-display font-bold text-xl mb-2 text-ink-black">University of Oxford — Essay Directives</h4>
+          <p class="text-sm text-muted-gray mb-3"><strong>SOP Prompt:</strong> Detail your academic motivation, research proposals, and fit with Department faculty in 1,000 words.</p>
+          <div class="text-xs bg-surface-soft p-3 rounded-lg border border-hairline">
+            <strong>LOR Requirement:</strong> 3 Academic recommendations on institutional letterhead.
+          </div>
+        `;
+      } else {
+        card.innerHTML = `
+          <h4 class="font-display font-bold text-xl mb-2 text-ink-black">ETH Zurich / NUS Directives</h4>
+          <p class="text-sm text-muted-gray mb-3">Focus heavily on course syllabus prerequisites, math foundations, and intended master thesis topic.</p>
+        `;
+      }
+    }
+
+    /* ================= EXAM SYLLABUS LOADER & TRACKER ================= */
+    function loadExamSyllabus(examKey) {
+      const data = examData[examKey];
+      const box = document.getElementById('exam-syllabus-box');
+
+      let html = `<h4 class="font-display font-bold text-xl mb-3 text-ink-black">${data.title}</h4>`;
+      data.sections.forEach(sec => {
+        html += `
+          <div class="p-3 bg-surface-soft rounded-xl border border-hairline">
+            <div class="flex justify-between items-center font-bold text-sm">
+              <span>${sec.name}</span>
+              <span class="text-emerald-600">${sec.score}</span>
+            </div>
+            <p class="text-xs text-muted-gray mt-1">${sec.detail}</p>
+          </div>
+        `;
+      });
+      box.innerHTML = html;
+    }
+
+    function saveExamTracker(e) {
+      e.preventDefault();
+      const examName = document.getElementById('tracker-exam-select').value;
+      const dateVal = document.getElementById('tracker-date-input').value;
+
+      if (!dateVal) return;
+
+      const target = new Date(dateVal);
+      const today = new Date();
+      const diffTime = target - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      document.getElementById('tracker-exam-title').textContent = examName + ' — Target Date';
+      document.getElementById('tracker-days-count').textContent = (diffDays > 0 ? diffDays : 0) + ' Days Left';
+
+      alert(`Background Target Tracker updated! ${examName} set for ${dateVal}.`);
+    }
+
+    /* Calendar .ICS File Generator Shortcut */
+    function downloadCalendarEvent() {
+      const examName = document.getElementById('tracker-exam-select').value;
+      const dateVal = document.getElementById('tracker-date-input').value.replace(/-/g, '');
+
+      const icsData = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//GlobalPath AI Study Abroad//Exam Tracker//EN
+BEGIN:VEVENT
+SUMMARY:${examName} Target Exam Date
+DESCRIPTION:Reminder for ${examName} study abroad application deadline.
+DTSTART:${dateVal}T090000Z
+DTEND:${dateVal}T120000Z
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute('download', `${examName.replace(/\s+/g, '_')}_Date.ics`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* ================= SCHOLARSHIP FILTER ================= */
+    function filterScholarships() {
+      const search = document.getElementById('sch-search').value.toLowerCase();
+      const region = document.getElementById('sch-region').value;
+      const type = document.getElementById('sch-type').value;
+      const grid = document.getElementById('scholarships-grid');
+
+      grid.innerHTML = '';
+
+      scholarshipsData.forEach(item => {
+        const matchSearch = item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search);
+        const matchRegion = region === 'all' || item.region === region;
+        const matchType = type === 'all' || item.type === type;
+
+        if (matchSearch && matchRegion && matchType) {
+          const card = document.createElement('div');
+          card.className = "bg-white border border-hairline p-6 card-jobright flex flex-col justify-between";
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <span class="bg-mint-canvas text-ink-black text-xs font-bold px-3 py-1 rounded-full border border-ink-black uppercase">${item.region}</span>
+                <span class="font-display font-bold text-lg text-emerald-600">${item.amount}</span>
+              </div>
+              <h4 class="font-display font-bold text-2xl text-ink-black mb-2">${item.name}</h4>
+              <p class="text-sm text-muted-gray mb-4">${item.desc}</p>
+            </div>
+            <button onclick="alert('Scholarship Application link opened!')" class="btn-pill-black py-2.5 text-xs">Apply For Financial Aid →</button>
+          `;
+          grid.appendChild(card);
+        }
+      });
+    }
+
+    /* ================= MODAL CONTROLS & SUBMISSIONS ================= */
+    function openRegisterModal(role = 'student') {
+      setRegisterRole(role);
+      document.getElementById('modal-register').classList.remove('hidden');
+    }
+
+    function setRegisterRole(role) {
+      const sForm = document.getElementById('form-register-student');
+      const gForm = document.getElementById('form-register-guider');
+      const sBtn = document.getElementById('reg-role-student-btn');
+      const gBtn = document.getElementById('reg-role-guider-btn');
+
+      if (role === 'student') {
+        sForm.classList.remove('hidden');
+        gForm.classList.add('hidden');
+        sBtn.className = "btn-pill-black px-6 py-2 text-xs";
+        gBtn.className = "bg-surface-soft text-ink-black border border-hairline px-6 py-2 text-xs rounded-full font-semibold";
+      } else {
+        gForm.classList.remove('hidden');
+        sForm.classList.add('hidden');
+        gBtn.className = "btn-pill-black px-6 py-2 text-xs";
+        sBtn.className = "bg-surface-soft text-ink-black border border-hairline px-6 py-2 text-xs rounded-full font-semibold";
+      }
+    }
+
+    function sendEduOTP() {
+      const email = document.getElementById('guider-edu-email').value;
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid university email address first.');
+        return;
+      }
+      document.getElementById('otp-box').classList.remove('hidden');
+      alert(`OTP sent to ${email}. Check inbox (Simulated OTP: 1234).`);
+    }
+
+    function verifyOTP() {
+      alert('OTP Verified successfully! University affiliation confirmed.');
+    }
+
+    function handleRegistrationSubmit(e, type) {
+      e.preventDefault();
+      if (type === 'student' && collegePreferences.length < 3) {
+        document.getElementById('college-error-msg').classList.remove('hidden');
+        return;
+      }
+
+      alert(`${type.toUpperCase()} registration completed successfully!`);
+      closeModal('modal-register');
+      if (type === 'guider') {
+        toggleUserRole('guider');
+      }
+    }
+
+    function openBookingModal(guiderName, rate, univ) {
+      document.getElementById('book-guider-info').textContent = `Guider: ${guiderName} (${univ})`;
+      document.getElementById('book-price-display').textContent = rate + ' USD';
+      document.getElementById('modal-booking').classList.remove('hidden');
+    }
+
+    function processBookingPayment(e) {
+      e.preventDefault();
+      alert('Payment authorized! 1:1 Video Session booked. Redirecting to video space...');
+      closeModal('modal-booking');
+      switchTab('video-space');
+    }
+
+    function openSampleModal(title, content) {
+      document.getElementById('sample-modal-title').textContent = title;
+      document.getElementById('sample-modal-body').textContent = content + "\n\n[Full verified document text provided for peer reference.]";
+      document.getElementById('modal-sample').classList.remove('hidden');
+    }
+
+    function openSOPReviewModal() {
+      alert('SOP submission form ready. Peer guiders will review within 24 hours.');
+    }
+
+    function openGuiderReviewModal(studentName) {
+      document.getElementById('review-student-name').textContent = `Reviewing SOP for ${studentName}`;
+      document.getElementById('modal-guider-review').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
